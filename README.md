@@ -35,4 +35,4 @@ Este projeto não foi construído com base em códigos prontos de IA. Priorizei 
 
 1. **Clone o repositório:**
    ```bash
-   git clone [https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/seu-usuario/nome-do-repositorio.git)
+   git clone [https://github.com/MuriloSilva110/mt5-report-automation](https://github.com/MuriloSilva110/mt5-report-automation)
