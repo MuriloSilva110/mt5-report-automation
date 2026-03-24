@@ -1,0 +1,33 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# --- IDEs (VS Code / PyCharm) ---
+.vscode/
+.idea/
+.project
+.pydevproject
+
+# --- Dados e Relatórios (Segurança e Organização) ---
+*.csv
+*.xlsx
+outputs/
+dados/
+reports/
+
+# --- Logs e Erros ---
+*.log
+mt5_errors.txt
+
+# --- Sistema Operacional ---
+.DS_Store
+Thumbs.db
+
+# --- Binários (Importante para o MT5) ---
+*.exe
+escopo.txt
