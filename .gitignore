@@ -1,1 +1,21 @@
 escopo.txt
+
+# Ambientes Virtuais
+.venv/
+env/
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Relatórios gerados
+relatorios/*.csv
+
+# Váriaveis de ambiente / Segurança
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/

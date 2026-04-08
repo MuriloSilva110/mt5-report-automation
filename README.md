@@ -39,8 +39,6 @@ Este projeto prioriza a consulta rigorosa à **documentação oficial do MetaTra
    ```bash
    git clone [https://github.com/MuriloSilva110/mt5-report-automation.git](https://github.com/MuriloSilva110/mt5-report-automation.git)
 
-   Aqui estão os passos finais para completar a seção **"Como Executar o Projeto"** do seu README, já formatados em Markdown para você copiar e colar:
-
 ---
 
 2. **Crie e ative seu ambiente virtual:**

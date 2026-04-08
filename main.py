@@ -8,7 +8,15 @@ from time import sleep
 from datetime import datetime, timedelta
 import pandas as pd
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+# Busca o caminho de forma segura
+CAMINHO_MT5 = os.getenv("MT5_TERMINAL_PATH")
 
 # exibimos dads sobre o pacote MetaTrader5
 print("MetaTrader5 package author: ",mt5.__author__)
@@ -64,14 +72,12 @@ def extrair_relatorio_semanal():
 
 
 #chama a funçao para se conectar ao terminal especificado
-if conectar_terminal(caminho_terminal="C:\\Program Files\\MetaTrader-pessoal\\terminal64.exe"):
+if conectar_terminal(caminho_terminal=CAMINHO_MT5):
     print("Conexão ao terminal MetaTrader 5 estabelecida com sucesso.")
-    # Imprimimos informaçoes  sobre o estado da conexao, o nome do servidor e a conta de negociaçao (# Futura def)
-    print(mt5.terminal_info())
-
-    # imprimimos informaçoes sobre a versao do mt5 (# Futura def)
-    print(mt5.version())
-
+    info = mt5.terminal_info()
+    print(info.company)
+    print(info.name)
+    print('=+='*20)
 
     relatorio = extrair_relatorio_semanal()
     if isinstance(relatorio, str):
