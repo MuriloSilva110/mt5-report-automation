@@ -81,6 +81,5 @@ Este projeto prioriza a consulta rigorosa à **documentação oficial do MetaTra
 ### 👨‍💻 Sobre o Desenvolvedor
 Projeto desenvolvido por **Murilo Silva**, aplicando os fundamentos de Análise e Desenvolvimento de Sistemas (ADS) da **Unisa** para criar arquiteturas de software robustas que unem tecnologia e mercado financeiro.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)]([https://www.linkedin.com/in/murilo-silva-dev](https://www.linkedin.com/in/murilo-silva-dev))
-
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/murilo-silva-dev/)
 ---
