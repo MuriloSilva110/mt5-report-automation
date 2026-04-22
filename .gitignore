@@ -19,3 +19,7 @@ relatorios/*.csv
 # IDEs
 .vscode/
 .idea/
+
+#Configs
+config/config.json
+*/config.json

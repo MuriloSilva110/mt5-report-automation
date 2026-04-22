@@ -1,3 +1,0 @@
-﻿ticket;order;time;time_msc;type;entry;magic;position_id;reason;volume;price;commission;swap;profit;fee;symbol;comment;external_id
-170977201;171004513;2026-04-06 23:38:05;1775518685125;0;0;0;171004513;0;0.01;0.7982;0.0;0.0;0.0;0.0;USDCHF;;
-170977295;171004576;2026-04-06 23:38:38;1775518718597;1;1;0;171004513;0;0.01;0.79811;0.0;0.0;-0.11;0.0;USDCHF;;
