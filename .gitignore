@@ -2,6 +2,7 @@ escopo.txt
 
 # Ambientes Virtuais
 .venv/
+venv/
 env/
 
 # Cache do Python

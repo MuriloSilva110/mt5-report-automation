@@ -8,15 +8,11 @@ from time import sleep
 from datetime import datetime, timedelta
 import pandas as pd
 from pathlib import Path
-import os
-from dotenv import load_dotenv
 from abc import ABC, abstractmethod
 import json
-# Carrega as variáveis de ambiente do arquivo .env
-load_dotenv()
 
-# Busca o caminho de forma segura
-CAMINHO_MT5 = os.getenv("MT5_TERMINAL_PATH")
+
+
 
 # exibimos dads sobre o pacote MetaTrader5
 print("MetaTrader5 package author: ",mt5.__author__)

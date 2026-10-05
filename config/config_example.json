@@ -1,10 +1,6 @@
-
-
 {
-    
-    "lista_terminais": {
-        "Terminal1": "Adicione o caminho do terminal aqui",
-        "Terminal2": "Adicione o caminho do terminal aqui",
-        "Terminal3": "Adicione o caminho do terminal aqui"
+    "terminais": {
+        "Terminal0": "C:\\Program Files\\MetaTrader 5\\terminal64.exe",
+        "Terminal1": "C:\\Program Files\\MetaTrader 5 - 2\\terminal64.exe"
     }
 }
