@@ -1,6 +1,3 @@
-
-
-```markdown
 # 🤖 MT5 Report Automation: Inteligência de Dados para Trading
 
 Este projeto automatiza a coleta, tratamento e geração de relatórios de performance de robôs de trading operando via **MetaTrader 5 (MT5)**. A solução utiliza Python para integração direta com o terminal e as bibliotecas Pandas e Matplotlib para transformar dados brutos em relatórios estatísticos estruturados (JSON) e análises visuais de performance (Curva de Capital).
@@ -66,67 +63,45 @@ Este projeto prioriza a consulta rigorosa à **documentação oficial do MetaTra
    git clone [https://github.com/MuriloSilva110/mt5-report-automation.git](https://github.com/MuriloSilva110/mt5-report-automation.git)
    cd mt5-report-automation
 
-```
+1 - Prepare o Ambiente Virtual:
+  python -m venv .venv
+  # No Windows (PowerShell):
+  .\.venv\Scripts\Activate.ps1
+  # Instale as dependências:
+  pip install -r requirements.txt
 
-2. **Prepare o Ambiente Virtual:**
-```bash
-python -m venv .venv
-# No Windows (PowerShell):
-.\.venv\Scripts\Activate.ps1
-# Instale as dependências:
-pip install -r requirements.txt
-
-```
-
-
-3. **Configure os Terminais:**
-Crie o arquivo `config/config.json` a partir do modelo `config/config_example.json`:
-```json
-{
+2 - Configure os Terminais:
+Crie o arquivo config/config.json a partir do modelo config/config_example.json:
+  {
   "terminais": {
     "Conta_Pessoal": "C:/Caminho/Para/terminal64.exe",
     "Conta_Prop": "C:/Caminho/Para/Outro/terminal64.exe"
   }
 }
 
-```
+3 -  Executar a Extração e Geração de Relatórios:
+  python main.py
+
+4 - Executar Testes de Análise Individual (Motor de Métricas):
+  python analises.py
 
 
-4. **Executar a Extração e Geração de Relatórios:**
-```bash
-python main.py
+🛣️ Roadmap de Desenvolvimento
+[x] Módulo de Extração: Coleta automatizada do histórico de ordens do MT5.
 
-```
+[x] Data Cleaning & Sanitização: Filtros de segurança, tratamento de datas e cálculo de resultado líquido com custos.
 
+[x] Módulo de Análise em POO (analises.py): Motor completo de métricas estatísticas, agrupamentos e exportador JSON customizado.
 
-5. **Executar Testes de Análise Individual (Motor de Métricas):**
-```bash
-python analises.py
+[ ] ⏳ Fase 4: Orquestração do Pipeline ETL (main.py):
 
-```
+[ ] Ajuste no truncamento da janela de datas do ExtratorRelatorioSemanal (meia-noite exata).
 
+[ ] Conexão direta entre main.py e o motor analises.py para gerar relatórios JSON automáticos ao final do loop.
 
+[ ] ⏳ Módulo de Notificação: Envio automatizado de resumos de performance via Telegram Bot.
 
----
+[ ] ⏳ Dashboard Integrado: Painel consolidado para acompanhamento de múltiplos robôs em tempo real.
 
-### 🛣️ Roadmap de Desenvolvimento
-
-* [x] **Módulo de Extração:** Coleta automatizada do histórico de ordens do MT5.
-* [x] **Data Cleaning & Sanitização:** Filtros de segurança, tratamento de datas e cálculo de resultado líquido com custos.
-* [x] **Módulo de Análise em POO (`analises.py`):** Motor completo de métricas estatísticas, agrupamentos e exportador JSON customizado.
-* [ ] ⏳ **Fase 4: Orquestração do Pipeline ETL (`main.py`):**
-* [ ] Ajuste no truncamento da janela de datas do `ExtratorRelatorioSemanal` (meia-noite exata).
-* [ ] Conexão direta entre `main.py` e o motor `analises.py` para gerar relatórios JSON automáticos ao final do loop.
-
-
-* [ ] ⏳ **Módulo de Notificação:** Envio automatizado de resumos de performance via Telegram Bot.
-* [ ] ⏳ **Dashboard Integrado:** Painel consolidado para acompanhamento de múltiplos robôs em tempo real.
-
----
-
-### 👨‍💻 Sobre o Desenvolvedor
-
-Projeto desenvolvido por **Murilo Silva**, aplicando os fundamentos de Análise e Desenvolvimento de Sistemas (ADS) da **Unisa** para criar arquiteturas de software robustas que unificam engenharia de dados e mercado financeiro.
-
-```
-
+👨‍💻 Sobre o Desenvolvedor
+Projeto desenvolvido por Murilo Silva, aplicando os fundamentos de Análise e Desenvolvimento de Sistemas (ADS) da Unisa para criar arquiteturas de software robustas que unificam engenharia de dados e mercado financeiro.
