@@ -64,27 +64,32 @@ Este projeto prioriza a consulta rigorosa à **documentação oficial do MetaTra
    cd mt5-report-automation
 
 1 - Prepare o Ambiente Virtual:
+  ```bash
   python -m venv .venv
   # No Windows (PowerShell):
   .\.venv\Scripts\Activate.ps1
   # Instale as dependências:
   pip install -r requirements.txt
+  ```
 
 2 - Configure os Terminais:
 Crie o arquivo config/config.json a partir do modelo config/config_example.json:
+  ```bash
   {
   "terminais": {
     "Conta_Pessoal": "C:/Caminho/Para/terminal64.exe",
     "Conta_Prop": "C:/Caminho/Para/Outro/terminal64.exe"
   }
-}
-
+  }
+  ```
 3 -  Executar a Extração e Geração de Relatórios:
+  ```bash
   python main.py
-
+  ```
 4 - Executar Testes de Análise Individual (Motor de Métricas):
+  ```bash
   python analises.py
-
+  ```
 
 🛣️ Roadmap de Desenvolvimento
 [x] Módulo de Extração: Coleta automatizada do histórico de ordens do MT5.
