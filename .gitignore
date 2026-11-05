@@ -27,3 +27,8 @@ config/config.json
 
 # pytest_cache/
 *.pytest_cache/
+posts linkedin/post1.txt
+posts linkedin/post2.txt
+.gitignore
+.gitignore
+posts linkedin/post3.txt

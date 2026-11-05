@@ -27,10 +27,11 @@ class ConectorMT5:
 
 
     def conectar(self):
-        while self.max_tentativas_conexao > 0:
+        tentativas = self.max_tentativas_conexao
+        while tentativas > 0:
             if not mt5.initialize(path=self.caminho_terminal, timeout=5000):
                 sleep(1)  
-                self.max_tentativas_conexao -= 1
+                tentativas -= 1
             else:
                 return True
         return False
@@ -38,15 +39,29 @@ class ConectorMT5:
     def desconectar(self):  
         mt5.shutdown()
 
+    def __enter__(self):
+        if self.conectar():
+            return self
+        raise Exception("Falha ao conectar com MT5")
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.desconectar()
+
 class ExtratorRelatorioSemanal:
     def extrair_relatorio(self):
-        data_fim = datetime.today()
-        dias_voltar = data_fim.weekday() + 1
-        inicio_semana = data_fim - timedelta(days=dias_voltar)
-        historico_odens_semanal = mt5.history_deals_get(inicio_semana, data_fim)
-        if historico_odens_semanal is not None and len(historico_odens_semanal) > 0:
-            return historico_odens_semanal
-        else:
+        try:
+            data_fim = datetime.today()
+            dias_voltar = data_fim.weekday() + 1
+            inicio_semana = data_fim - timedelta(days=dias_voltar)
+            historico_ordens_semanal = mt5.history_deals_get(inicio_semana, data_fim)
+            
+            if historico_ordens_semanal is not None and len(historico_ordens_semanal) > 0:
+                return historico_ordens_semanal
+            else:
+                return list()
+
+        except Exception as e:
+            print(f"Erro ao extrair relatório semanal: {e}")
             return list()
 
 class FormatarRelatorioSemanal:
@@ -68,14 +83,11 @@ class ConversorDataframe(ABC):
 
 
 class ConversorCSV(ConversorDataframe):
-    def salvar(self, df, path, nome_terminal):
-        diretorio_relatorios = Path(path)
-        if not diretorio_relatorios.exists():
-            diretorio_relatorios.mkdir()
-        nome_arquivo = diretorio_relatorios / f"relatorio_semanal_{nome_terminal}_{datetime.now().strftime('%Y%m%d')}.csv"
-        df.to_csv(nome_arquivo, index=False, sep=';', encoding='utf-8-sig')
-    
-        return nome_arquivo
+    def salvar(self, df, caminho_completo):
+        caminho_completo.parent.mkdir(parents=True, exist_ok=True)
+        df.to_csv(caminho_completo, index=False, sep=';', encoding='utf-8-sig')
+        return caminho_completo
+       
 
 
 
@@ -95,23 +107,24 @@ def carregar_configuracao(caminho_config="config/config.json"):
 if __name__ == "__main__":
     terminais = carregar_configuracao()
     print("Iniciando o processo de automação de relatórios de performance de robôs de trading...")
+    extrator = ExtratorRelatorioSemanal()
+    formatador = FormatarRelatorioSemanal()
+    conversor_csv = ConversorCSV()
+    
     for nome_terminal, caminho_terminal in terminais.items():
-        conector = ConectorMT5(caminho_terminal=caminho_terminal)
-        if conector.conectar():
-            print(f"Conexão com MT5 estabelecida com sucesso para o terminal {nome_terminal}!")
-            extrator = ExtratorRelatorioSemanal()
-            relatorio_semanal = extrator.extrair_relatorio()
+        try:
+            relatorio_semanal = []
+            with ConectorMT5(caminho_terminal=caminho_terminal) as conector:
+                print(f"Conexão com MT5 estabelecida com sucesso para o terminal {nome_terminal}!")
+                relatorio_semanal = extrator.extrair_relatorio()
             if len(relatorio_semanal) > 0:
                 print(f"Relatório semanal extraído com sucesso! Total de ordens: {len(relatorio_semanal)}")
-                formatador = FormatarRelatorioSemanal()
                 df_relatorio = formatador.create_dataframe(relatorio_semanal)
-                conversor_csv = ConversorCSV()
-                caminho_relatorio = conversor_csv.salvar(df_relatorio, path="relatorios", nome_terminal=nome_terminal)
+                caminho_relatorio = Path("relatorios/") / f"relatorio_semanal_{nome_terminal}_{datetime.today().strftime('%Y-%m-%d')}.csv"
+                conversor_csv.salvar(df_relatorio,caminho_relatorio)
                 print(f"Relatório semanal salvo em: {caminho_relatorio}")
-                conector.desconectar()
             else:
                 print("Nenhuma ordem encontrada no período semanal. Verifique se há dados disponíveis.")
-                conector.desconectar()
-        else:
-            print(f"Falha ao conectar com MT5. Verifique o caminho do terminal {nome_terminal} e tente novamente.")
+        except Exception as e:
+            print(f"Erro ao processar o terminal {nome_terminal}: {e}")
 
