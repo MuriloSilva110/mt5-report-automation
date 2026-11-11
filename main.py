@@ -10,9 +10,8 @@ import pandas as pd
 from pathlib import Path
 from abc import ABC, abstractmethod
 import json
-
-
-
+# Importação dos módulos de sanitização, análise e serialização do analises.py
+from analises import LerRelatorioCsv, SanitizadorDados, AnalisesTecnicas, EncoderTradingJSON
 
 # exibimos dads sobre o pacote MetaTrader5
 print("MetaTrader5 package author: ",mt5.__author__)
@@ -88,7 +87,12 @@ class ConversorCSV(ConversorDataframe):
         df.to_csv(caminho_completo, index=False, sep=';', encoding='utf-8-sig')
         return caminho_completo
        
-
+class ConversorJSON(ConversorDataframe):
+    def salvar(self, dados, caminho_completo):
+        caminho_completo.parent.mkdir(parents=True, exist_ok=True)
+        with open(caminho_completo, 'w', encoding='utf-8') as arquivo:
+            json.dump(dados, arquivo, indent=4, cls=EncoderTradingJSON)
+        return caminho_completo
 
 
 def carregar_configuracao(caminho_config="config/config.json"):
@@ -107,24 +111,58 @@ def carregar_configuracao(caminho_config="config/config.json"):
 if __name__ == "__main__":
     terminais = carregar_configuracao()
     print("Iniciando o processo de automação de relatórios de performance de robôs de trading...")
+    
     extrator = ExtratorRelatorioSemanal()
     formatador = FormatarRelatorioSemanal()
     conversor_csv = ConversorCSV()
+    conversor_json = ConversorJSON()
     
     for nome_terminal, caminho_terminal in terminais.items():
         try:
+            print(f"\n--- Processando Terminal: {nome_terminal} ---")
             relatorio_semanal = []
+            
             with ConectorMT5(caminho_terminal=caminho_terminal) as conector:
-                print(f"Conexão com MT5 estabelecida com sucesso para o terminal {nome_terminal}!")
+                print(f"Conexão com MT5 estabelecida para {nome_terminal}!")
                 relatorio_semanal = extrator.extrair_relatorio()
+                
             if len(relatorio_semanal) > 0:
-                print(f"Relatório semanal extraído com sucesso! Total de ordens: {len(relatorio_semanal)}")
-                df_relatorio = formatador.create_dataframe(relatorio_semanal)
-                caminho_relatorio = Path("relatorios/") / f"relatorio_semanal_{nome_terminal}_{datetime.today().strftime('%Y-%m-%d')}.csv"
-                conversor_csv.salvar(df_relatorio,caminho_relatorio)
-                print(f"Relatório semanal salvo em: {caminho_relatorio}")
+                print(f"Relatório semanal extraído com sucesso! Ordens no período: {len(relatorio_semanal)}")
+                
+                # 1. Converte e salva o relatório bruto da última semana
+                df_semana = formatador.create_dataframe(relatorio_semanal)
+                caminho_csv = Path("relatorios/") / f"relatorio_semanal_{nome_terminal}_{datetime.today().strftime('%Y-%m-%d')}.csv"
+                conversor_csv.salvar(df_semana, caminho_csv)
+                print(f"Relatório semanal salvo em: {caminho_csv}")
             else:
-                print("Nenhuma ordem encontrada no período semanal. Verifique se há dados disponíveis.")
+                print("Nenhuma ordem nova encontrada no período semanal.")
+                
+            # 2. Carrega o histórico acumulado exclusivo deste terminal
+            leitor_historico = LerRelatorioCsv(nome_terminal)
+            df_historico_completo = leitor_historico.carregar_dataframe_relatorio_completo()
+            
+            if not df_historico_completo.empty:
+                # 3. Sanitiza o histórico completo
+                sanitizador = SanitizadorDados(df_historico_completo)
+                df_sanitizado = sanitizador.sanitizar()
+                
+                if not df_sanitizado.empty:
+                    # 4. Calcula métricas quantitativas acumuladas
+                    analises = AnalisesTecnicas(df_sanitizado)
+                    metricas_acumuladas = analises.calcular_tudo()
+                    
+                    # Adiciona quebras por ativo e por dia da semana
+                    metricas_acumuladas['desempenho_por_ativo'] = analises.calcular_por_ativo()
+                    metricas_acumuladas['desempenho_por_dia'] = analises.desempenho_por_dia()
+                    
+                    # 5. Salva o JSON consolidado do terminal
+                    caminho_json = Path("relatorios/") / f"metricas_consolidadas_{nome_terminal}.json"
+                    conversor_json.salvar(metricas_acumuladas, caminho_json)
+                    print(f"Métricas históricas consolidadas salvas em: {caminho_json}")
+                else:
+                    print(f"Aviso: Nenhuma operação válida restou após a sanitização do histórico de {nome_terminal}.")
+            else:
+                print(f"Nenhum histórico acumulado encontrado para o terminal {nome_terminal}.")
+
         except Exception as e:
             print(f"Erro ao processar o terminal {nome_terminal}: {e}")
-
