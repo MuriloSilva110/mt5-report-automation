@@ -1,0 +1,28 @@
+{
+    "lucro_liquido": 17622.0,
+    "taxa_acerto": 57.78,
+    "fator_lucro": 3.99,
+    "total_operacoes": 45,
+    "maior_lucro_individual": 1452.0,
+    "maior_prejuizo_individual": -540.0,
+    "payoff_ratio": 2.0,
+    "max_drawdown": -960.0,
+    "desempenho_por_ativo": {
+        "XAUUSD": {
+            "lucro_liquido": 17622.0,
+            "taxa_acerto": 57.78,
+            "fator_lucro": 3.99,
+            "total_operacoes": 45,
+            "maior_lucro_individual": 1452.0,
+            "maior_prejuizo_individual": -540.0,
+            "payoff_ratio": 2.0,
+            "max_drawdown": -960.0
+        }
+    },
+    "desempenho_por_dia": {
+        "Monday": {
+            "lucro_liquido": 17622.0,
+            "total_operacoes": 45
+        }
+    }
+}
